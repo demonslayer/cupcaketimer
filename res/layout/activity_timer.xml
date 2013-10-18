@@ -9,17 +9,6 @@
     tools:context=".TimerActivity" >
 
     <TextView
-        android:id="@+id/colon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="86dp"
-        android:text="@string/colon"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="72sp" />
-
-    <TextView
         android:id="@+id/minute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,15 +39,6 @@
         android:text="@string/start" />
 
     <ImageButton
-        android:id="@+id/upArrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/minute"
-        android:layout_toLeftOf="@+id/minute"
-        android:src="@android:drawable/arrow_up_float"
-        android:contentDescription="@string/upArrow" />
-
-    <ImageButton
         android:id="@+id/downArrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,5 +46,25 @@
         android:layout_toLeftOf="@+id/minute"
         android:src="@android:drawable/arrow_down_float"
         android:contentDescription="@string/downArrow" />
+
+    <ImageButton
+        android:id="@+id/upArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/minute"
+        android:layout_toLeftOf="@+id/minute"
+        android:contentDescription="@string/upArrow"
+        android:src="@android:drawable/arrow_up_float" />
+
+    <TextView
+        android:id="@+id/colon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:text="@string/colon"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="72sp" />
 
 </RelativeLayout>
