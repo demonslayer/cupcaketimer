@@ -3,6 +3,8 @@ package com.example.cupcake;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -108,6 +110,18 @@ public class TimerActivity extends Activity implements OnClickListener {
 	}
 
 	private void makeTimer() {
+		
+		final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+		alertDialog.setTitle("Timer Finished!");
+		alertDialog.setMessage("The timer is finished! Take a well-earned break :)");
+		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog,int which) 
+            {
+               alertDialog.dismiss();
+            }
+        });
+		
 		this.timer = new CountDownTimer(minutes*60*1000, 1000) {
 
 			@Override
@@ -118,6 +132,9 @@ public class TimerActivity extends Activity implements OnClickListener {
 				
 				updateText();
 				setViewNotRunning();
+				
+				alertDialog.show();
+
 			}
 
 			@Override
