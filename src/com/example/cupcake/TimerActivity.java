@@ -38,6 +38,9 @@ public class TimerActivity extends Activity implements OnClickListener {
 		minutesText = (TextView) findViewById(R.id.minute);
 		secondsText = (TextView) findViewById(R.id.second);
 		startButton = (Button) findViewById(R.id.startbutton);
+		
+		minutes = 25;
+		seconds = 0;
 				
 		updateText();
 		
