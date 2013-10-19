@@ -27,7 +27,6 @@ public class TimerActivity extends Activity implements OnClickListener {
 	private int lastSetMinutes = 25;
 	
 	private CountDownTimer timer;
-	private boolean isRunning = false;
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +74,8 @@ public class TimerActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.startbutton:
 			Log.d(TAG, "Pressed the start button");
-			if (isRunning) {
-				timer.cancel();
-				setViewNotRunning();
-			} else {
-				timer.start();
-				setViewToRunning();
-			}
+			timer.start();
+			setViewToRunning();
 			break;
 		default:
 			Log.wtf(TAG, "That's not even a button");
@@ -94,20 +88,15 @@ public class TimerActivity extends Activity implements OnClickListener {
 	}
 
 	private void setViewNotRunning() {
-		if (isRunning) {
-			timer.cancel();
-		}
-		isRunning = false;
 		upArrow.setVisibility(View.VISIBLE);
 		downArrow.setVisibility(View.VISIBLE);
-		startButton.setText("Start");
+		startButton.setVisibility(View.VISIBLE);
 	}
 
 	private void setViewToRunning() {
-		isRunning = true;
 		upArrow.setVisibility(View.GONE);
 		downArrow.setVisibility(View.GONE);
-		startButton.setText("Cancel");
+		startButton.setVisibility(View.GONE);
 	}
 	
 	private void updateText() {
@@ -123,7 +112,6 @@ public class TimerActivity extends Activity implements OnClickListener {
 				Log.d(TAG, "Timer done");
 				seconds = 0;
 				minutes = lastSetMinutes;
-				isRunning = false;
 				
 				updateText();
 				setViewNotRunning();
