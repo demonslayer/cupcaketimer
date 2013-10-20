@@ -1,10 +1,14 @@
 package com.example.cupcake;
 
+import java.io.IOException;
+
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.res.AssetFileDescriptor;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -29,6 +33,8 @@ public class TimerActivity extends Activity implements OnClickListener {
 	private int lastSetMinutes = 25;
 	
 	private CountDownTimer timer;
+	
+	private MediaPlayer player;
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,17 @@ public class TimerActivity extends Activity implements OnClickListener {
 		startButton.setOnClickListener(this);
 		
 		setViewNotRunning();
+		
+		AssetFileDescriptor afd;
+		try {
+			afd = getAssets().openFd("tone.mp3");
+			player = new MediaPlayer();
+			player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+			player.prepare();
+		} catch (IOException e) {
+			Log.e(TAG, "Couldn't open the mp3");
+			player = null;
+		}
 				
 		makeTimer();
 		
@@ -119,6 +136,9 @@ public class TimerActivity extends Activity implements OnClickListener {
             public void onClick(DialogInterface dialog,int which) 
             {
                alertDialog.dismiss();
+               if (player != null && player.isPlaying()) {
+            	   player.stop();
+               }
             }
         });
 		
@@ -132,6 +152,10 @@ public class TimerActivity extends Activity implements OnClickListener {
 				
 				updateText();
 				setViewNotRunning();
+				
+				if (player != null) {
+					player.start();
+				}
 				
 				alertDialog.show();
 
