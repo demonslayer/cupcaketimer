@@ -139,6 +139,14 @@ public class TimerActivity extends Activity implements OnClickListener {
                alertDialog.dismiss();
                if (player != null && player.isPlaying()) {
             	   player.stop();
+            	   
+            	   try {
+            		   player.prepare();
+            	   } catch (IllegalStateException e) {
+					e.printStackTrace();
+            	   } catch (IOException e) {
+					e.printStackTrace();
+            	   }
                }
             }
         });
