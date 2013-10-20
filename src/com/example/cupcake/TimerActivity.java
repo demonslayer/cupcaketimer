@@ -96,7 +96,7 @@ public class TimerActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.downArrow:
 			Log.d(TAG, "Pressed the down arrow");
-			if (minutes > 0) {
+			if (minutes > 1) {
 				minutes--;
 			}
 			break;
