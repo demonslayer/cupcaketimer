@@ -7,7 +7,12 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.util.Log;
 import android.view.Menu;
@@ -126,6 +131,30 @@ public class TimerActivity extends Activity implements OnClickListener {
 		secondsText.setText(String.format("%02d", seconds));
 		minutesText.setText(String.format("%02d",minutes));
 	}
+	
+	private void notifyFinished() {
+		String ns = Context.NOTIFICATION_SERVICE;
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
+		
+		int icon = R.drawable.ic_launcher;
+		CharSequence tickerText = "Time's Up!";
+		long when = System.currentTimeMillis();
+
+		Notification notification = new Notification(icon, tickerText, when);
+		
+		Context context = getApplicationContext();
+		CharSequence contentTitle = "Cupcake Timer";
+		CharSequence contentText = "Your task is finished!";
+		Intent notificationIntent = this.getIntent();
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+		
+		final int HELLO_ID = 1;
+
+		mNotificationManager.notify(HELLO_ID, notification);
+		
+	}
 
 	private void makeTimer() {
 		
@@ -165,6 +194,8 @@ public class TimerActivity extends Activity implements OnClickListener {
 				if (player != null) {
 					player.start();
 				}
+				
+				notifyFinished();
 				
 				alertDialog.show();
 
