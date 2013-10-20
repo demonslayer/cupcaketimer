@@ -63,6 +63,7 @@ public class TimerActivity extends Activity implements OnClickListener {
 			afd = getAssets().openFd("tone.mp3");
 			player = new MediaPlayer();
 			player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+			player.setLooping(true);
 			player.prepare();
 		} catch (IOException e) {
 			Log.e(TAG, "Couldn't open the mp3");
