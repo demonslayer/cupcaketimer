@@ -141,6 +141,7 @@ public class TimerActivity extends Activity implements OnClickListener {
 		long when = System.currentTimeMillis();
 
 		Notification notification = new Notification(icon, tickerText, when);
+		notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 		
 		Context context = getApplicationContext();
 		CharSequence contentTitle = "Cupcake Timer";
