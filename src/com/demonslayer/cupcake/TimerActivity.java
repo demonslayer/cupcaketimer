@@ -26,48 +26,46 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class TimerActivity extends Activity implements OnClickListener {
-	
+
 	private static final String TAG = "TimerActivity";
-	
+
 	private ImageButton upArrow;
 	private ImageButton downArrow;
 	private TextView minutesText; 
 	private TextView secondsText;
 	private Button startButton;
-	
+
 	private int minutes;
 	private int seconds;
-	
+
 	private int lastSetMinutes = 25;
-	
+
 	private CountDownTimer timer;
-	
+
 	private MediaPlayer player;
-	
-	private boolean isRunning = false;
-		
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timer);
-		
+
 		upArrow = (ImageButton) findViewById(R.id.upArrow);
 		downArrow = (ImageButton) findViewById(R.id.downArrow);
 		minutesText = (TextView) findViewById(R.id.minute);
 		secondsText = (TextView) findViewById(R.id.second);
 		startButton = (Button) findViewById(R.id.startbutton);
-		
+
 		minutes = 25;
 		seconds = 0;
-				
+
 		updateText();
-		
+
 		upArrow.setOnClickListener(this);
 		downArrow.setOnClickListener(this);
 		startButton.setOnClickListener(this);
-		
+
 		setViewNotRunning();
-		
+
 		AssetFileDescriptor afd;
 		try {
 			afd = getAssets().openFd("tone.mp3");
@@ -79,9 +77,7 @@ public class TimerActivity extends Activity implements OnClickListener {
 			Log.e(TAG, "Couldn't open the mp3");
 			player = null;
 		}
-				
-		makeTimer();
-		
+
 	}
 
 	@Override
@@ -90,32 +86,31 @@ public class TimerActivity extends Activity implements OnClickListener {
 		getMenuInflater().inflate(R.menu.timer, menu);
 		return true;
 	}
-	
+
 	@Override
 	public void onBackPressed() {
-	    AlertDialog.Builder abuilder = new Builder(this);
-	    abuilder.setMessage("Quit Cupcake Timer?");
-	    abuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		AlertDialog.Builder abuilder = new Builder(this);
+		abuilder.setMessage("Quit Cupcake Timer?");
+		abuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
-	        public void onClick(DialogInterface dialog, int which) {
-	        	isRunning = false;
-	            timer.cancel(); 
-	            finish();           
-	        }
-	    });
-	    abuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				timer.cancel(); 
+				finish();           
+			}
+		});
+		abuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
 
-	        public void onClick(DialogInterface dialog, int which) {
-	            dialog.cancel();            
-	        }
-	    });
-	    AlertDialog alert = abuilder.create();
-	    alert.show();
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();            
+			}
+		});
+		AlertDialog alert = abuilder.create();
+		alert.show();
 	}
 
 	@Override
 	public void onClick(View v) {
-		
+
 		switch(v.getId()) {
 		case R.id.upArrow:
 			Log.d(TAG, "Pressed the up arrow");
@@ -129,48 +124,48 @@ public class TimerActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.startbutton:
 			Log.d(TAG, "Pressed the start button");
+			makeTimer();
 			timer.start();
 			setViewToRunning();
+			lastSetMinutes = minutes;
 			break;
 		default:
 			Log.wtf(TAG, "That's not even a button");
 		}
-		
+
 		updateText();
-		lastSetMinutes = minutes;
 		
+
 	}
 
 	private void setViewNotRunning() {
-		isRunning = false;
 		upArrow.setVisibility(View.VISIBLE);
 		downArrow.setVisibility(View.VISIBLE);
 		startButton.setVisibility(View.VISIBLE);
 	}
 
 	private void setViewToRunning() {
-		isRunning = true;
 		upArrow.setVisibility(View.GONE);
 		downArrow.setVisibility(View.GONE);
 		startButton.setVisibility(View.GONE);
 	}
-	
+
 	private void updateText() {
 		secondsText.setText(String.format("%02d", seconds));
 		minutesText.setText(String.format("%02d",minutes));
 	}
-	
+
 	private void notifyFinished() {
 		String ns = Context.NOTIFICATION_SERVICE;
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
-		
+
 		int icon = R.drawable.ic_launcher;
 		CharSequence tickerText = "Time's Up!";
 		long when = System.currentTimeMillis();
 
 		Notification notification = new Notification(icon, tickerText, when);
 		notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-		
+
 		Context context = getApplicationContext();
 		CharSequence contentTitle = "Cupcake Timer";
 		CharSequence contentText = "Your task is finished!";
@@ -178,75 +173,70 @@ public class TimerActivity extends Activity implements OnClickListener {
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-		
+
 		final int HELLO_ID = 1;
 
 		mNotificationManager.notify(HELLO_ID, notification);
-		
+
 	}
 
 	private void makeTimer() {
-		
+
 		final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 		alertDialog.setTitle("Timer Finished!");
 		alertDialog.setMessage("The timer is finished! Take a well-earned break :)");
 		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
 
-            public void onClick(DialogInterface dialog,int which) 
-            {
-               alertDialog.dismiss();
-               if (player != null && player.isPlaying()) {
-            	   player.stop();
-            	   
-            	   try {
-            		   player.prepare();
-            	   } catch (IllegalStateException e) {
-					e.printStackTrace();
-            	   } catch (IOException e) {
-					e.printStackTrace();
-            	   }
-               }
-            }
-        });
-		
+			public void onClick(DialogInterface dialog,int which) 
+			{
+				alertDialog.dismiss();
+				if (player != null && player.isPlaying()) {
+					player.stop();
+
+					try {
+						player.prepare();
+					} catch (IllegalStateException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
 		this.timer = new CountDownTimer(minutes*60*1000, 1000) {
 
 			@Override
 			public void onFinish() {
-				if (isRunning) {
-					Log.d(TAG, "Timer done");
-					seconds = 0;
-					minutes = lastSetMinutes;
-					
-					updateText();
-					setViewNotRunning();
-					
-					if (player != null) {
-						player.start();
-					}
-					
-					notifyFinished();
-					
-					alertDialog.show();
-					
-					isRunning = false;
+				Log.d(TAG, "Timer done");
+				seconds = 0;
+				minutes = lastSetMinutes;
+
+				updateText();
+				setViewNotRunning();
+
+				if (player != null) {
+					player.start();
 				}
+
+				notifyFinished();
+
+				alertDialog.show();
 
 			}
 
 			@Override
 			public void onTick(long millisUntilFinished) {
 				
-				if (!isRunning) {
-					Log.d(TAG, "still ticking");
-				}
+				Log.d(TAG, "tick");
+
 				if (seconds <= 0) {
 					seconds = 59;
 					minutes--;
 				} else {
 					seconds--;
 				}
-				
+
 				updateText();
 			}
 		};
