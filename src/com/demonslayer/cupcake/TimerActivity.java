@@ -2,6 +2,7 @@ package com.demonslayer.cupcake;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.example.cupcake.R;
@@ -30,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 public class TimerActivity extends ListActivity implements OnClickListener {
@@ -100,7 +102,15 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		
 		List<String> taskNames = new ArrayList<String>();
 		
-		if (cursor != null ) {
+		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>(cursor.getCount());
+
+        String[] from = new String[] { "taskname", "minutescompleted" };
+
+        int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
+
+        int nativeLayout = android.R.layout.two_line_list_item;
+        
+        if (cursor != null ) {
 		    if  (cursor.moveToFirst()) {
 		        do {
 		        	String taskName = cursor.getString(cursor.getColumnIndex(helper.C_TASK_NAME));
@@ -109,21 +119,23 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 					
 					Log.d(TAG, taskName + " has a default time of " + defaultTime);
 					
-					taskNames.add(taskName + " (" + minutesCompleted + " minutes completed)");
+					HashMap<String, String> item = new HashMap<String, String>();
+					item.put("taskname", taskName);
+					item.put("minutescompleted", minutesCompleted + " minutes completed");
+					
+					list.add(item);
 		        }while (cursor.moveToNext());
 		    }
 		}
 		cursor.close();
 		db.close();
 		
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, taskNames);
-		
 		TextView header = new TextView(this.getBaseContext());
 		header.setText("Tasks");
 		tasks.addHeaderView(header);
-		
-		setListAdapter(adapter);
 
+        this.setListAdapter(new SimpleAdapter(this, list, nativeLayout , from, to));
+		
 	}
 
 	@Override
