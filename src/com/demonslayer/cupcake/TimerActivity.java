@@ -1,6 +1,8 @@
-package com.example.cupcake;
+package com.demonslayer.cupcake;
 
 import java.io.IOException;
+
+import com.example.cupcake.R;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -134,7 +136,6 @@ public class TimerActivity extends Activity implements OnClickListener {
 			Log.wtf(TAG, "That's not even a button");
 		}
 		
-		makeTimer();
 		updateText();
 		lastSetMinutes = minutes;
 		
