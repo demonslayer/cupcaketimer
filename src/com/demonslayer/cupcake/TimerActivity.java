@@ -17,6 +17,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -43,6 +45,9 @@ public class TimerActivity extends Activity implements OnClickListener {
 	private CountDownTimer timer;
 
 	private MediaPlayer player;
+	
+	private DbHelper helper;
+	private SQLiteDatabase db;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,26 @@ public class TimerActivity extends Activity implements OnClickListener {
 			Log.e(TAG, "Couldn't open the mp3");
 			player = null;
 		}
+		
+		helper = new DbHelper(this.getBaseContext());		
+		db = helper.getWritableDatabase();
+		
+		Cursor cursor = db.query(helper.TABLE, null, null, null, null, null, helper.C_CREATED_AT + " asc");
+		
+		Log.d(TAG, "cursor has " + cursor.getCount() + " entries.");
+		
+		if (cursor != null ) {
+		    if  (cursor.moveToFirst()) {
+		        do {
+		        	String taskName = cursor.getString(cursor.getColumnIndex(helper.C_TASK_NAME));
+					int defaultTime = cursor.getInt(cursor.getColumnIndex(helper.C_DEFAULT_TIME));
+					
+					Log.d(TAG, taskName + " has a default time of " + defaultTime);
+		        }while (cursor.moveToNext());
+		    }
+		}
+		cursor.close();
+		db.close();
 
 	}
 
