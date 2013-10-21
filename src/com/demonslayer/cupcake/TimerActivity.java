@@ -124,30 +124,37 @@ public class TimerActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.startbutton:
 			Log.d(TAG, "Pressed the start button");
-			makeTimer();
-			timer.start();
-			setViewToRunning();
-			lastSetMinutes = minutes;
+			if (startButton.getText().equals("Start")) {
+				makeTimer();
+				timer.start();
+				setViewToRunning();
+				lastSetMinutes = minutes;
+			} else {
+				timer.cancel();
+				seconds = 0;
+				minutes = lastSetMinutes;
+				setViewNotRunning();
+			}
 			break;
 		default:
 			Log.wtf(TAG, "That's not even a button");
 		}
 
 		updateText();
-		
+
 
 	}
 
 	private void setViewNotRunning() {
 		upArrow.setVisibility(View.VISIBLE);
 		downArrow.setVisibility(View.VISIBLE);
-		startButton.setVisibility(View.VISIBLE);
+		startButton.setText("Start");
 	}
 
 	private void setViewToRunning() {
 		upArrow.setVisibility(View.GONE);
 		downArrow.setVisibility(View.GONE);
-		startButton.setVisibility(View.GONE);
+		startButton.setText("Cancel");
 	}
 
 	private void updateText() {
@@ -227,7 +234,7 @@ public class TimerActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onTick(long millisUntilFinished) {
-				
+
 				Log.d(TAG, "tick");
 
 				if (seconds <= 0) {
