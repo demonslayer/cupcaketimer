@@ -1,6 +1,8 @@
 package com.demonslayer.cupcake;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.cupcake.R;
 
@@ -10,6 +12,7 @@ import android.os.CountDownTimer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.ListActivity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -23,11 +26,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
-public class TimerActivity extends Activity implements OnClickListener {
+public class TimerActivity extends ListActivity implements OnClickListener {
 
 	private static final String TAG = "TimerActivity";
 
@@ -36,6 +41,8 @@ public class TimerActivity extends Activity implements OnClickListener {
 	private TextView minutesText; 
 	private TextView secondsText;
 	private Button startButton;
+	private ListView tasks;
+	private ArrayAdapter<String> adapter;
 
 	private int minutes;
 	private int seconds;
@@ -59,6 +66,7 @@ public class TimerActivity extends Activity implements OnClickListener {
 		minutesText = (TextView) findViewById(R.id.minute);
 		secondsText = (TextView) findViewById(R.id.second);
 		startButton = (Button) findViewById(R.id.startbutton);
+		tasks = (ListView) findViewById(android.R.id.list);
 
 		minutes = 25;
 		seconds = 0;
@@ -90,6 +98,8 @@ public class TimerActivity extends Activity implements OnClickListener {
 		
 		Log.d(TAG, "cursor has " + cursor.getCount() + " entries.");
 		
+		List<String> taskNames = new ArrayList<String>();
+		
 		if (cursor != null ) {
 		    if  (cursor.moveToFirst()) {
 		        do {
@@ -97,11 +107,21 @@ public class TimerActivity extends Activity implements OnClickListener {
 					int defaultTime = cursor.getInt(cursor.getColumnIndex(helper.C_DEFAULT_TIME));
 					
 					Log.d(TAG, taskName + " has a default time of " + defaultTime);
+					
+					taskNames.add(taskName);
 		        }while (cursor.moveToNext());
 		    }
 		}
 		cursor.close();
 		db.close();
+		
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, taskNames);
+		
+		TextView header = new TextView(this.getBaseContext());
+		header.setText("Tasks");
+		tasks.addHeaderView(header);
+		
+		setListAdapter(adapter);
 
 	}
 
