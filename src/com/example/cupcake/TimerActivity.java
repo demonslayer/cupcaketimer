@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -40,6 +41,8 @@ public class TimerActivity extends Activity implements OnClickListener {
 	private CountDownTimer timer;
 	
 	private MediaPlayer player;
+	
+	private boolean isRunning = false;
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,28 @@ public class TimerActivity extends Activity implements OnClickListener {
 		getMenuInflater().inflate(R.menu.timer, menu);
 		return true;
 	}
+	
+	@Override
+	public void onBackPressed() {
+	    AlertDialog.Builder abuilder = new Builder(this);
+	    abuilder.setMessage("Quit Cupcake Timer?");
+	    abuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+	        public void onClick(DialogInterface dialog, int which) {
+	        	isRunning = false;
+	            timer.cancel(); 
+	            finish();           
+	        }
+	    });
+	    abuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+	        public void onClick(DialogInterface dialog, int which) {
+	            dialog.cancel();            
+	        }
+	    });
+	    AlertDialog alert = abuilder.create();
+	    alert.show();
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -116,12 +141,14 @@ public class TimerActivity extends Activity implements OnClickListener {
 	}
 
 	private void setViewNotRunning() {
+		isRunning = false;
 		upArrow.setVisibility(View.VISIBLE);
 		downArrow.setVisibility(View.VISIBLE);
 		startButton.setVisibility(View.VISIBLE);
 	}
 
 	private void setViewToRunning() {
+		isRunning = true;
 		upArrow.setVisibility(View.GONE);
 		downArrow.setVisibility(View.GONE);
 		startButton.setVisibility(View.GONE);
@@ -185,25 +212,33 @@ public class TimerActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onFinish() {
-				Log.d(TAG, "Timer done");
-				seconds = 0;
-				minutes = lastSetMinutes;
-				
-				updateText();
-				setViewNotRunning();
-				
-				if (player != null) {
-					player.start();
+				if (isRunning) {
+					Log.d(TAG, "Timer done");
+					seconds = 0;
+					minutes = lastSetMinutes;
+					
+					updateText();
+					setViewNotRunning();
+					
+					if (player != null) {
+						player.start();
+					}
+					
+					notifyFinished();
+					
+					alertDialog.show();
+					
+					isRunning = false;
 				}
-				
-				notifyFinished();
-				
-				alertDialog.show();
 
 			}
 
 			@Override
 			public void onTick(long millisUntilFinished) {
+				
+				if (!isRunning) {
+					Log.d(TAG, "still ticking");
+				}
 				if (seconds <= 0) {
 					seconds = 59;
 					minutes--;
