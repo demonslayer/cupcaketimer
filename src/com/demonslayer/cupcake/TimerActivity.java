@@ -105,10 +105,11 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		        do {
 		        	String taskName = cursor.getString(cursor.getColumnIndex(helper.C_TASK_NAME));
 					int defaultTime = cursor.getInt(cursor.getColumnIndex(helper.C_DEFAULT_TIME));
+					int minutesCompleted = cursor.getInt(cursor.getColumnIndex(helper.C_MINUTES_COMPLETED));
 					
 					Log.d(TAG, taskName + " has a default time of " + defaultTime);
 					
-					taskNames.add(taskName);
+					taskNames.add(taskName + " (" + minutesCompleted + " minutes completed)");
 		        }while (cursor.moveToNext());
 		    }
 		}
