@@ -11,5 +11,6 @@
     <string name="start">Start</string>
     <string name="upArrow">up arrow</string>
     <string name="downArrow">down arrow</string>
+    <string name="notask">No Task is Selected</string>
 
 </resources>

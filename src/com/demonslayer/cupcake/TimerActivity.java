@@ -44,6 +44,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 	private TextView secondsText;
 	private Button startButton;
 	private ListView tasks;
+	private TextView currentTask;
 	
 	private int minutes;
 	private int seconds;
@@ -69,6 +70,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		secondsText = (TextView) findViewById(R.id.second);
 		startButton = (Button) findViewById(R.id.startbutton);
 		tasks = (ListView) findViewById(android.R.id.list);
+		currentTask = (TextView) findViewById(R.id.currentTask);
 
 		minutes = 25;
 		seconds = 0;
@@ -114,6 +116,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 					cursor.moveToFirst();
 					selectedTask = taskName;
 					minutes = cursor.getInt(cursor.getColumnIndex(DbHelper.C_DEFAULT_TIME));
+					currentTask.setText("Task " + selectedTask + " is selected.");
 					updateText();
 				}
 				
@@ -194,12 +197,18 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		upArrow.setVisibility(View.VISIBLE);
 		downArrow.setVisibility(View.VISIBLE);
 		startButton.setText("Start");
+		if (selectedTask != null) {
+			currentTask.setText("Task " + selectedTask + " is selected.");
+		}
 	}
 
 	private void setViewToRunning() {
 		upArrow.setVisibility(View.GONE);
 		downArrow.setVisibility(View.GONE);
 		startButton.setText("Cancel");
+		if (selectedTask != null) {
+			currentTask.setText("Now working on " + selectedTask);
+		}
 	}
 
 	private void updateText() {
