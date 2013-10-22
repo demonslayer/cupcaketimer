@@ -8,6 +8,7 @@ import java.util.Map;
 import com.example.cupcake.R;
 
 import android.media.MediaPlayer;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.app.AlertDialog;
@@ -32,6 +33,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -48,6 +50,9 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 	private Button startButton;
 	private ListView tasks;
 	private TextView currentTask;
+	private ImageView editButton;
+	private ImageView deleteButton;
+	private ImageView addButton;
 	
 	private int minutes;
 	private int seconds;
@@ -78,6 +83,10 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		startButton = (Button) findViewById(R.id.startbutton);
 		tasks = (ListView) findViewById(android.R.id.list);
 		currentTask = (TextView) findViewById(R.id.currentTask);
+		
+		addButton = (ImageView) findViewById(R.id.addButton);
+		editButton = (ImageView) findViewById(R.id.editButton);
+		deleteButton = (ImageView) findViewById(R.id.deleteButton);
 
 		minutes = 25;
 		seconds = 0;
@@ -87,6 +96,13 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		upArrow.setOnClickListener(this);
 		downArrow.setOnClickListener(this);
 		startButton.setOnClickListener(this);
+		
+		addButton.setOnClickListener(this);
+		editButton.setOnClickListener(this);
+		deleteButton.setOnClickListener(this);
+		
+		editButton.setVisibility(View.GONE);
+		deleteButton.setVisibility(View.GONE);
 
 		setViewNotRunning();
 
@@ -126,6 +142,8 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 					minutes = cursor.getInt(cursor.getColumnIndex(DbHelper.C_DEFAULT_TIME));
 					oldMinutes = cursor.getInt(cursor.getColumnIndex(DbHelper.C_MINUTES_COMPLETED));
 					currentTask.setText("Task " + selectedTask + " is selected.");
+					editButton.setVisibility(View.VISIBLE);
+					deleteButton.setVisibility(View.VISIBLE);
 					updateText();
 				}
 				
@@ -318,7 +336,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 	
 	protected void updateMinutesCompleted(int minutes,
 			String taskName) {
-		SQLiteDatabase db = helper.getReadableDatabase();
+		SQLiteDatabase db = helper.getWritableDatabase();
 		
 		ContentValues cv = new ContentValues();
 		cv.put(DbHelper.C_MINUTES_COMPLETED, minutes + oldMinutes);

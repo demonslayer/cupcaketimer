@@ -67,15 +67,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="72sp" />
 
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/startbutton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="49dp" >
-    </ListView>
-
     <TextView
         android:id="@+id/currentTask"
         android:layout_width="wrap_content"
@@ -84,5 +75,39 @@
         android:layout_alignParentTop="true"
         android:text="@string/notask"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editButton"
+        android:layout_alignRight="@+id/editButton"
+        android:layout_below="@+id/startbutton" >
+
+    </ListView>
+
+    <ImageView
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/ic_menu_add" />
+
+    <ImageView
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/addButton"
+        android:layout_toLeftOf="@+id/addButton"
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <ImageView
+        android:id="@+id/editButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/deleteButton"
+        android:layout_toLeftOf="@+id/deleteButton"
+        android:src="@android:drawable/ic_menu_edit" />
 
 </RelativeLayout>
