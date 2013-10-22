@@ -16,6 +16,7 @@ import android.app.ListActivity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -58,6 +59,8 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 	
 	private DbHelper helper;
 	private SQLiteDatabase db;
+	
+	private int oldMinutes = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +119,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 					cursor.moveToFirst();
 					selectedTask = taskName;
 					minutes = cursor.getInt(cursor.getColumnIndex(DbHelper.C_DEFAULT_TIME));
+					oldMinutes = cursor.getInt(cursor.getColumnIndex(DbHelper.C_MINUTES_COMPLETED));
 					currentTask.setText("Task " + selectedTask + " is selected.");
 					updateText();
 				}
@@ -283,6 +287,8 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 				notifyFinished();
 
 				alertDialog.show();
+				
+				updateMinutesCompleted(lastSetMinutes, selectedTask);
 
 			}
 
@@ -303,6 +309,17 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		};
 	}
 	
+	protected void updateMinutesCompleted(int minutes,
+			String taskName) {
+		SQLiteDatabase db = helper.getReadableDatabase();
+		
+		ContentValues cv = new ContentValues();
+		cv.put(DbHelper.C_MINUTES_COMPLETED, minutes + oldMinutes);
+		db.update(DbHelper.TABLE, cv, DbHelper.C_TASK_NAME + "=?", new String[] {taskName});
+				
+		db.close();		
+	}
+
 	private void createList() {
 		db = helper.getWritableDatabase();
 		
