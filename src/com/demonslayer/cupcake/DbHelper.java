@@ -13,7 +13,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final String DB_NAME = "tasks.db";
 	private static final int DB_VERSION = 1;
 	static final String TABLE = "task";
-	private static final String C_ID = BaseColumns._ID;
+	static final String C_ID = BaseColumns._ID;
 	static final String C_CREATED_AT = "created_at";
 	static final String C_TASK_NAME = "task_name";
 	static final String C_DEFAULT_TIME = "default_time";
@@ -30,7 +30,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String sql = "create table " + TABLE + " (" + C_ID + " int primary key, " + C_CREATED_AT + " int, " + C_TASK_NAME + " text, " 
+		String sql = "create table " + TABLE + " (" + C_ID + " integer primary key autoincrement, " + C_CREATED_AT + " int, " + C_TASK_NAME + " text, " 
 				+ C_DEFAULT_TIME + " int, " + C_MINUTES_COMPLETED + " int)";
 		db.execSQL(sql);
 		ContentValues work = new ContentValues();
