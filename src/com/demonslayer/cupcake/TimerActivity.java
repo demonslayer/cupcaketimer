@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.example.cupcake.R;
+import com.example.cupcake.TaskEditActivity;
 
 import android.media.MediaPlayer;
 import android.opengl.Visibility;
@@ -211,6 +212,11 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 				setViewNotRunning();
 			}
 			break;
+		case R.id.addButton:
+			Log.d(TAG, "Pressed the add button");
+			Intent intent = new Intent(this, TaskEditActivity.class);
+			this.startActivity(intent);
+			break;
 		default:
 			Log.wtf(TAG, "That's not even a button");
 		}
@@ -223,6 +229,11 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 	private void setViewNotRunning() {
 		upArrow.setVisibility(View.VISIBLE);
 		downArrow.setVisibility(View.VISIBLE);
+		addButton.setVisibility(View.VISIBLE);
+		if (selectedTask != null) {
+			deleteButton.setVisibility(View.VISIBLE);
+			editButton.setVisibility(View.VISIBLE);
+		}
 		startButton.setText("Start");
 		if (selectedTask != null) {
 			currentTask.setText("Task " + selectedTask + " is selected.");
@@ -233,6 +244,11 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		upArrow.setVisibility(View.GONE);
 		downArrow.setVisibility(View.GONE);
 		startButton.setText("Cancel");
+		addButton.setVisibility(View.GONE);
+		if (selectedTask != null) {
+			deleteButton.setVisibility(View.GONE);
+			editButton.setVisibility(View.GONE);
+		}
 		if (selectedTask != null) {
 			currentTask.setText("Now working on " + selectedTask);
 		}
