@@ -170,7 +170,9 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		abuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
-				timer.cancel(); 
+				if (timer != null) {
+					timer.cancel(); 
+				}
 				finish();           
 			}
 		});
