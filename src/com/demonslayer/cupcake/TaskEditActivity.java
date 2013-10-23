@@ -10,6 +10,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.Editable;
@@ -75,6 +76,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		int count = cursor.getCount();
 		
 		db.close();
+		cursor.close();
 		
 		if (count > 0) {
 			AlertDialog.Builder abuilder = new Builder(this);
@@ -85,6 +87,7 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 					SQLiteDatabase db = helper.getWritableDatabase();
 					db.update(DbHelper.TABLE, newTask, DbHelper.C_TASK_NAME + "=?", new String[] {taskName});
 					db.close();
+					returnToTimer();
 				}
 			});
 			abuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -98,10 +101,15 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		} else {
 			db = helper.getWritableDatabase();
 			db.insert(DbHelper.TABLE, null, newTask);
+			db.close();
+			returnToTimer();
 		}
-		
-		cursor.close();
-		db.close();
+	}
+
+	private void returnToTimer() {
+		Intent intent = new Intent(this, TimerActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		this.startActivity(intent);
 	}
 
 }
