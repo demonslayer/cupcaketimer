@@ -230,6 +230,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 			clearButton.setVisibility(View.GONE);
 			editButton.setVisibility(View.GONE);
 			deleteButton.setVisibility(View.GONE);
+			break;
 		default:
 			Log.wtf(TAG, "That's not even a button");
 		}
