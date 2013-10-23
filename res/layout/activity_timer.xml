@@ -110,4 +110,12 @@
         android:layout_toLeftOf="@+id/deleteButton"
         android:src="@android:drawable/ic_menu_edit" />
 
+    <ImageView
+        android:id="@+id/clearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editButton"
+        android:layout_toLeftOf="@+id/editButton"
+        android:src="@android:drawable/ic_menu_revert" />
+
 </RelativeLayout>

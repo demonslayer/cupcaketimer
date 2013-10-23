@@ -53,6 +53,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 	private ImageView editButton;
 	private ImageView deleteButton;
 	private ImageView addButton;
+	private ImageView clearButton;
 	
 	private int minutes;
 	private int seconds;
@@ -87,6 +88,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		addButton = (ImageView) findViewById(R.id.addButton);
 		editButton = (ImageView) findViewById(R.id.editButton);
 		deleteButton = (ImageView) findViewById(R.id.deleteButton);
+		clearButton = (ImageView) findViewById(R.id.clearButton);
 
 		minutes = 25;
 		seconds = 0;
@@ -100,9 +102,11 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		addButton.setOnClickListener(this);
 		editButton.setOnClickListener(this);
 		deleteButton.setOnClickListener(this);
+		clearButton.setOnClickListener(this);
 		
 		editButton.setVisibility(View.GONE);
 		deleteButton.setVisibility(View.GONE);
+		clearButton.setVisibility(View.GONE);
 
 		setViewNotRunning();
 
@@ -144,6 +148,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 					currentTask.setText("Task " + selectedTask + " is selected.");
 					editButton.setVisibility(View.VISIBLE);
 					deleteButton.setVisibility(View.VISIBLE);
+					clearButton.setVisibility(View.VISIBLE);
 					updateText();
 				}
 				
@@ -218,6 +223,13 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 			Intent intent = new Intent(this, TaskEditActivity.class);
 			this.startActivity(intent);
 			break;
+		case R.id.clearButton:
+			Log.d(TAG, "Pressed the clear button");
+			this.selectedTask = null;
+			currentTask.setText(R.string.notask);
+			clearButton.setVisibility(View.GONE);
+			editButton.setVisibility(View.GONE);
+			deleteButton.setVisibility(View.GONE);
 		default:
 			Log.wtf(TAG, "That's not even a button");
 		}
@@ -234,6 +246,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		if (selectedTask != null) {
 			deleteButton.setVisibility(View.VISIBLE);
 			editButton.setVisibility(View.VISIBLE);
+			clearButton.setVisibility(View.VISIBLE);
 		}
 		startButton.setText("Start");
 		if (selectedTask != null) {
@@ -251,6 +264,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		if (selectedTask != null) {
 			deleteButton.setVisibility(View.GONE);
 			editButton.setVisibility(View.GONE);
+			clearButton.setVisibility(View.GONE);
 		}
 		if (selectedTask != null) {
 			currentTask.setText("Now working on " + selectedTask);
