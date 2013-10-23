@@ -239,6 +239,8 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		if (selectedTask != null) {
 			currentTask.setText("Task " + selectedTask + " is selected.");
 		}
+		
+		tasks.setVisibility(View.VISIBLE);
 	}
 
 	private void setViewToRunning() {
@@ -253,6 +255,8 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		if (selectedTask != null) {
 			currentTask.setText("Now working on " + selectedTask);
 		}
+		
+		tasks.setVisibility(View.GONE);
 	}
 
 	private void updateText() {
