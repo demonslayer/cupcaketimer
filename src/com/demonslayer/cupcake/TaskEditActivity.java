@@ -6,7 +6,10 @@ import com.example.cupcake.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.Editable;
@@ -57,22 +60,43 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		
 	}
 
-	private void updateEntry(String taskName, String timeString) {
-		SQLiteDatabase db = helper.getWritableDatabase();
+	private void updateEntry(final String taskName, final String timeString) {
 		
 		int time = Integer.parseInt(timeString);
 		
-		ContentValues newTask = new ContentValues();
+		final ContentValues newTask = new ContentValues();
 		newTask.put(DbHelper.C_TASK_NAME, taskName);
 		newTask.put(DbHelper.C_DEFAULT_TIME, time);
 		
+		SQLiteDatabase db = helper.getWritableDatabase();
+				
 		Cursor cursor = db.query(DbHelper.TABLE, null, 
                 DbHelper.C_TASK_NAME + "=?", new String[] {taskName}, null, null, null);
 		int count = cursor.getCount();
 		
+		db.close();
+		
 		if (count > 0) {
-			db.update(DbHelper.TABLE, newTask, DbHelper.C_TASK_NAME + "=?", new String[] {taskName});
+			AlertDialog.Builder abuilder = new Builder(this);
+			abuilder.setMessage("Overwrite existing task " + taskName + "?");
+			abuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					SQLiteDatabase db = helper.getWritableDatabase();
+					db.update(DbHelper.TABLE, newTask, DbHelper.C_TASK_NAME + "=?", new String[] {taskName});
+					db.close();
+				}
+			});
+			abuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();            
+				}
+			});
+			AlertDialog alert = abuilder.create();
+			alert.show();
 		} else {
+			db = helper.getWritableDatabase();
 			db.insert(DbHelper.TABLE, null, newTask);
 		}
 		
