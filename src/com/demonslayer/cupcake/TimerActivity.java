@@ -231,6 +231,32 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 			editButton.setVisibility(View.GONE);
 			deleteButton.setVisibility(View.GONE);
 			break;
+		case R.id.deleteButton:
+			Log.d(TAG, "Pressed delete button");
+			AlertDialog.Builder abuilder = new Builder(this);
+			abuilder.setMessage("Overwrite existing task " + selectedTask + "?");
+			abuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					SQLiteDatabase db = helper.getWritableDatabase();
+					
+					db.delete(DbHelper.TABLE, DbHelper.C_TASK_NAME + "=?", new String[] {selectedTask});
+					
+					db.close();
+					
+					finish();
+					startActivity(getIntent());
+				}
+			});
+			abuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();            
+				}
+			});
+			AlertDialog alert = abuilder.create();
+			alert.show();
+			break;
 		default:
 			Log.wtf(TAG, "That's not even a button");
 		}
@@ -432,7 +458,9 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 			adapter = new SimpleAdapter(this, list, nativeLayout , from, to);
 	        this.setListAdapter(adapter);
 		} else {
+			adapter = new SimpleAdapter(this, list, nativeLayout , from, to);
 			adapter.notifyDataSetChanged();
+			Log.d(TAG, "notified data set changed");
 		}
 	}
 
