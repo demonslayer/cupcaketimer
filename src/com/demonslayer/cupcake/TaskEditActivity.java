@@ -7,6 +7,7 @@ import com.example.cupcake.R.menu;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.Editable;
 import android.util.Log;
@@ -65,9 +66,17 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 		newTask.put(DbHelper.C_TASK_NAME, taskName);
 		newTask.put(DbHelper.C_DEFAULT_TIME, time);
 		
-		db.insert(DbHelper.TABLE, null, newTask);
+		Cursor cursor = db.query(DbHelper.TABLE, null, 
+                DbHelper.C_TASK_NAME + "=?", new String[] {taskName}, null, null, null);
+		int count = cursor.getCount();
 		
+		if (count > 0) {
+			db.update(DbHelper.TABLE, newTask, DbHelper.C_TASK_NAME + "=?", new String[] {taskName});
+		} else {
+			db.insert(DbHelper.TABLE, null, newTask);
+		}
 		
+		cursor.close();
 		db.close();
 	}
 
