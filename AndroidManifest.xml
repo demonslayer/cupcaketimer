@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.cupcake.TaskEditActivity"
+            android:name="com.demonslayer.cupcake.TaskEditActivity"
             android:label="@string/title_activity_task_edit" >
         </activity>
     </application>
