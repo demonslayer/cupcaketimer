@@ -9,8 +9,47 @@
     tools:context=".TaskEditActivity" >
 
     <TextView
+        android:id="@+id/taskNameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:text="@string/taskNameLabel" />
+
+    <EditText
+        android:id="@+id/taskNameField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/taskNameLabel"
+        android:layout_below="@+id/taskNameLabel"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/defaultTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/taskNameField"
+        android:layout_below="@+id/taskNameField"
+        android:layout_marginTop="41dp"
+        android:text="@string/DefaultTimeMinutes"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <EditText
+        android:id="@+id/defaultTimeField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/defaultTimeLabel"
+        android:layout_below="@+id/defaultTimeLabel"
+        android:ems="10"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/defaultTimeField"
+        android:layout_centerVertical="true"
+        android:text="@string/save" />
 
 </RelativeLayout>

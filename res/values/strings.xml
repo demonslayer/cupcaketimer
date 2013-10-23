@@ -13,5 +13,8 @@
     <string name="downArrow">down arrow</string>
     <string name="notask">No Task is Selected</string>
     <string name="title_activity_task_edit">TaskEditActivity</string>
+    <string name="taskNameLabel">Task Name</string>
+    <string name="DefaultTimeMinutes">Default Time (minutes)</string>
+    <string name="save">Save</string>
 
 </resources>
