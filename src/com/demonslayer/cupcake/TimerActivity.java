@@ -50,7 +50,6 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 	private Button startButton;
 	private ListView tasks;
 	private TextView currentTask;
-	private ImageView editButton;
 	private ImageView deleteButton;
 	private ImageView addButton;
 	private ImageView clearButton;
@@ -86,7 +85,6 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		currentTask = (TextView) findViewById(R.id.currentTask);
 		
 		addButton = (ImageView) findViewById(R.id.addButton);
-		editButton = (ImageView) findViewById(R.id.editButton);
 		deleteButton = (ImageView) findViewById(R.id.deleteButton);
 		clearButton = (ImageView) findViewById(R.id.clearButton);
 
@@ -100,11 +98,9 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		startButton.setOnClickListener(this);
 		
 		addButton.setOnClickListener(this);
-		editButton.setOnClickListener(this);
 		deleteButton.setOnClickListener(this);
 		clearButton.setOnClickListener(this);
 		
-		editButton.setVisibility(View.GONE);
 		deleteButton.setVisibility(View.GONE);
 		clearButton.setVisibility(View.GONE);
 
@@ -146,7 +142,6 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 					minutes = cursor.getInt(cursor.getColumnIndex(DbHelper.C_DEFAULT_TIME));
 					oldMinutes = cursor.getInt(cursor.getColumnIndex(DbHelper.C_MINUTES_COMPLETED));
 					currentTask.setText("Task " + selectedTask + " is selected.");
-					editButton.setVisibility(View.VISIBLE);
 					deleteButton.setVisibility(View.VISIBLE);
 					clearButton.setVisibility(View.VISIBLE);
 					updateText();
@@ -228,13 +223,12 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 			this.selectedTask = null;
 			currentTask.setText(R.string.notask);
 			clearButton.setVisibility(View.GONE);
-			editButton.setVisibility(View.GONE);
 			deleteButton.setVisibility(View.GONE);
 			break;
 		case R.id.deleteButton:
 			Log.d(TAG, "Pressed delete button");
 			AlertDialog.Builder abuilder = new Builder(this);
-			abuilder.setMessage("Overwrite existing task " + selectedTask + "?");
+			abuilder.setMessage("Delete task " + selectedTask + "?");
 			abuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
 				public void onClick(DialogInterface dialog, int which) {
@@ -272,7 +266,6 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		addButton.setVisibility(View.VISIBLE);
 		if (selectedTask != null) {
 			deleteButton.setVisibility(View.VISIBLE);
-			editButton.setVisibility(View.VISIBLE);
 			clearButton.setVisibility(View.VISIBLE);
 		}
 		startButton.setText("Start");
@@ -290,7 +283,6 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		addButton.setVisibility(View.GONE);
 		if (selectedTask != null) {
 			deleteButton.setVisibility(View.GONE);
-			editButton.setVisibility(View.GONE);
 			clearButton.setVisibility(View.GONE);
 		}
 		if (selectedTask != null) {

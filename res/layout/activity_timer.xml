@@ -44,8 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/upArrow"
         android:layout_toLeftOf="@+id/minute"
-        android:src="@android:drawable/arrow_down_float"
-        android:contentDescription="@string/downArrow" />
+        android:contentDescription="@string/downArrow"
+        android:src="@android:drawable/arrow_down_float" />
 
     <ImageButton
         android:id="@+id/upArrow"
@@ -80,10 +80,8 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/editButton"
-        android:layout_alignRight="@+id/editButton"
-        android:layout_below="@+id/startbutton" >
-
+        android:layout_below="@+id/startbutton"
+        android:layout_toLeftOf="@+id/deleteButton" >
     </ListView>
 
     <ImageView
@@ -103,19 +101,11 @@
         android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
     <ImageView
-        android:id="@+id/editButton"
+        android:id="@+id/clearButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/deleteButton"
         android:layout_toLeftOf="@+id/deleteButton"
-        android:src="@android:drawable/ic_menu_edit" />
-
-    <ImageView
-        android:id="@+id/clearButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/editButton"
-        android:layout_toLeftOf="@+id/editButton"
         android:src="@android:drawable/ic_menu_revert" />
 
 </RelativeLayout>
