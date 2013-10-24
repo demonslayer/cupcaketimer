@@ -65,7 +65,23 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 
 	private void updateEntry(final String taskName, final String timeString) {
 		
-		int time = Integer.parseInt(timeString);
+		int time = 0;
+		try {
+			time = Integer.parseInt(timeString);
+		} catch (NumberFormatException ex) {
+			AlertDialog.Builder abuilder = new Builder(this);
+			abuilder.setMessage("Must choose valid number for time");
+			abuilder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();
+				}
+			});
+			
+			AlertDialog alert = abuilder.create();
+			alert.show();
+			return;
+		}
 		
 		final ContentValues newTask = new ContentValues();
 		newTask.put(DbHelper.C_TASK_NAME, taskName);
