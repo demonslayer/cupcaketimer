@@ -16,5 +16,9 @@
     <string name="taskNameLabel">Task Name</string>
     <string name="DefaultTimeMinutes">Default Time (minutes)</string>
     <string name="save">Save</string>
+    
+    <color name="brown">#4D3832</color>
+    <color name="mint">#37EDC6</color>
+    <color name="palemint">#ACFAE9</color>
 
 </resources>
