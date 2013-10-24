@@ -38,6 +38,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.view.ViewGroup;
 
 public class TimerActivity extends ListActivity implements OnClickListener {
 
@@ -53,7 +54,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 	private ImageView deleteButton;
 	private ImageView addButton;
 	private ImageView clearButton;
-	
+
 	private int minutes;
 	private int seconds;
 
@@ -63,14 +64,14 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 	private CountDownTimer timer;
 
 	private MediaPlayer player;
-	
+
 	private DbHelper helper;
 	private SQLiteDatabase db;
-	
+
 	private int oldMinutes = 0;
 	private int currentPosition;
 	private SimpleAdapter adapter;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -83,7 +84,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		startButton = (Button) findViewById(R.id.startbutton);
 		tasks = (ListView) findViewById(android.R.id.list);
 		currentTask = (TextView) findViewById(R.id.currentTask);
-		
+
 		addButton = (ImageView) findViewById(R.id.addButton);
 		deleteButton = (ImageView) findViewById(R.id.deleteButton);
 		clearButton = (ImageView) findViewById(R.id.clearButton);
@@ -96,11 +97,11 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		upArrow.setOnClickListener(this);
 		downArrow.setOnClickListener(this);
 		startButton.setOnClickListener(this);
-		
+
 		addButton.setOnClickListener(this);
 		deleteButton.setOnClickListener(this);
 		clearButton.setOnClickListener(this);
-		
+
 		deleteButton.setVisibility(View.GONE);
 		clearButton.setVisibility(View.GONE);
 
@@ -117,24 +118,24 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 			Log.e(TAG, "Couldn't open the mp3");
 			player = null;
 		}
-		
+
 		helper = new DbHelper(this.getBaseContext());		
 		createList();
-		
+
 		tasks.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				
+
 				Map item = (HashMap) parent.getAdapter().getItem(position);
 				String taskName = (String) item.get("taskname");
-				
+
 				db = helper.getWritableDatabase();
 				Cursor cursor = db.query(DbHelper.TABLE, null, 
-		                DbHelper.C_TASK_NAME + "=?", new String[] {taskName}, null, null, null);
+						DbHelper.C_TASK_NAME + "=?", new String[] {taskName}, null, null, null);
 				int count = cursor.getCount();
-				
+
 				if (count > 0) {
 					cursor.moveToFirst();
 					selectedTask = taskName;
@@ -146,13 +147,13 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 					clearButton.setVisibility(View.VISIBLE);
 					updateText();
 				}
-				
+
 				cursor.close();
 				db.close();
 			}
-			
+
 		});
-		
+
 	}
 
 	@Override
@@ -233,11 +234,11 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 
 				public void onClick(DialogInterface dialog, int which) {
 					SQLiteDatabase db = helper.getWritableDatabase();
-					
+
 					db.delete(DbHelper.TABLE, DbHelper.C_TASK_NAME + "=?", new String[] {selectedTask});
-					
+
 					db.close();
-					
+
 					finish();
 					startActivity(getIntent());
 				}
@@ -272,7 +273,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		if (selectedTask != null) {
 			currentTask.setText("Task " + selectedTask + " is selected.");
 		}
-		
+
 		tasks.setVisibility(View.VISIBLE);
 	}
 
@@ -288,7 +289,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		if (selectedTask != null) {
 			currentTask.setText("Now working on " + selectedTask);
 		}
-		
+
 		tasks.setVisibility(View.GONE);
 	}
 
@@ -364,7 +365,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 				notifyFinished();
 
 				alertDialog.show();
-				
+
 				if (selectedTask != null) {
 					updateMinutesCompleted(lastSetMinutes, selectedTask);
 				}
@@ -387,59 +388,59 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 			}
 		};
 	}
-	
+
 	protected void updateMinutesCompleted(int minutes,
 			String taskName) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		
+
 		ContentValues cv = new ContentValues();
 		cv.put(DbHelper.C_MINUTES_COMPLETED, minutes + oldMinutes);
 		db.update(DbHelper.TABLE, cv, DbHelper.C_TASK_NAME + "=?", new String[] {taskName});
-		
+
 		Map<String, String> item = (HashMap) adapter.getItem(currentPosition - 1);
 		item.put("minutescompleted", String.valueOf(minutes + oldMinutes) + " minutes completed");
 		adapter.notifyDataSetChanged();
-				
+
 		db.close();	
-				
+
 	}
 
 	private void createList() {
 		db = helper.getWritableDatabase();
-		
+
 		Cursor cursor = db.query(DbHelper.TABLE, null, null, null, null, null, DbHelper.C_CREATED_AT + " asc");
-		
+
 		Log.d(TAG, "cursor has " + cursor.getCount() + " entries.");
-				
+
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>(cursor.getCount());
 
-        String[] from = new String[] { "taskname", "minutescompleted" };
+		String[] from = new String[] { "taskname", "minutescompleted" };
 
-        int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
+		int[] to = new int[] { android.R.id.text1, android.R.id.text2 };
 
-        int nativeLayout = android.R.layout.two_line_list_item;
-        
-        if (cursor != null ) {
-		    if  (cursor.moveToFirst()) {
-		        do {
-		        	String taskName = cursor.getString(cursor.getColumnIndex(DbHelper.C_TASK_NAME));
+		int nativeLayout = android.R.layout.two_line_list_item;
+
+		if (cursor != null ) {
+			if  (cursor.moveToFirst()) {
+				do {
+					String taskName = cursor.getString(cursor.getColumnIndex(DbHelper.C_TASK_NAME));
 					int defaultTime = cursor.getInt(cursor.getColumnIndex(DbHelper.C_DEFAULT_TIME));
 					int minutesCompleted = cursor.getInt(cursor.getColumnIndex(DbHelper.C_MINUTES_COMPLETED));
 					int id = cursor.getInt(cursor.getColumnIndex(DbHelper.C_ID));
-					
+
 					Log.d(TAG, taskName + " has a default time of " + defaultTime + " and id of " + id);
-					
+
 					HashMap<String, String> item = new HashMap<String, String>();
 					item.put("taskname", taskName);
 					item.put("minutescompleted", minutesCompleted + " minutes completed");
-					
+
 					list.add(item);
-		        }while (cursor.moveToNext());
-		    }
+				}while (cursor.moveToNext());
+			}
 		}
 		cursor.close();
 		db.close();
-		
+
 		if (tasks.getHeaderViewsCount() == 0) {
 			TextView header = new TextView(this.getBaseContext());
 			header.setText("Tasks");
@@ -447,8 +448,22 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 		}
 
 		if (this.getListAdapter() == null) {
-			adapter = new SimpleAdapter(this, list, nativeLayout , from, to);
-	        this.setListAdapter(adapter);
+			adapter = new SimpleAdapter(this, list, nativeLayout , from, to) {
+
+				@Override
+				public View getView(int position, View convertView, ViewGroup parent) {
+					View view = super.getView(position, convertView, parent);
+					TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+					text1.setTextColor(getResources().getColor(R.color.mint));
+					
+					TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+					text2.setTextColor(getResources().getColor(R.color.palemint));
+
+					return view;
+
+				};
+			};
+			this.setListAdapter(adapter);
 		} else {
 			adapter = new SimpleAdapter(this, list, nativeLayout , from, to);
 			adapter.notifyDataSetChanged();

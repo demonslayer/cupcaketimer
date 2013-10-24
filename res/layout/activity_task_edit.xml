@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/brown"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,7 +13,8 @@
         android:id="@+id/taskNameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/taskNameLabel" />
+        android:text="@string/taskNameLabel"
+        android:textColor="@color/mint" />
 
     <EditText
         android:id="@+id/taskNameField"
@@ -33,7 +35,8 @@
         android:layout_below="@+id/taskNameField"
         android:layout_marginTop="41dp"
         android:text="@string/DefaultTimeMinutes"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/mint" />
 
     <EditText
         android:id="@+id/defaultTimeField"
