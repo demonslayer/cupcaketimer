@@ -27,6 +27,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -75,6 +76,7 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_timer);
 
 		upArrow = (ImageButton) findViewById(R.id.upArrow);
