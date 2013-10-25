@@ -8,6 +8,9 @@ import java.util.Map;
 import com.example.cupcake.R;
 
 import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -72,6 +75,8 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 	private int oldMinutes = 0;
 	private int currentPosition;
 	private SimpleAdapter adapter;
+	
+	private Ringtone tone;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -335,16 +340,8 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 			public void onClick(DialogInterface dialog,int which) 
 			{
 				alertDialog.dismiss();
-				if (player != null && player.isPlaying()) {
-					player.stop();
-
-					try {
-						player.prepare();
-					} catch (IllegalStateException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				if (tone != null) {
+					tone.stop();
 				}
 			}
 		});
@@ -359,9 +356,17 @@ public class TimerActivity extends ListActivity implements OnClickListener {
 
 				updateText();
 				setViewNotRunning();
-
-				if (player != null) {
-					player.start();
+				
+				try {
+					
+					Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+					tone = RingtoneManager.getRingtone(getApplicationContext(), notification);
+					tone.play();
+					
+				} catch (NullPointerException ex) {
+					
+					Log.e(TAG, "No default alert tone found");
+					
 				}
 
 				notifyFinished();

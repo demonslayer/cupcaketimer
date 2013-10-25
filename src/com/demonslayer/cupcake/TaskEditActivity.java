@@ -65,21 +65,16 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 
 	private void updateEntry(final String taskName, final String timeString) {
 		
-		int time = 0;
+		int time = 1;
 		try {
 			time = Integer.parseInt(timeString);
 		} catch (NumberFormatException ex) {
-			AlertDialog.Builder abuilder = new Builder(this);
-			abuilder.setMessage("Must choose valid number for time");
-			abuilder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.cancel();
-				}
-			});
-			
-			AlertDialog alert = abuilder.create();
-			alert.show();
+			invalidNumber();
+			return;
+		}
+		
+		if (time < 1) {
+			invalidNumber();
 			return;
 		}
 		
@@ -122,6 +117,21 @@ public class TaskEditActivity extends Activity implements OnClickListener {
 			db.close();
 			returnToTimer();
 		}
+	}
+
+	private void invalidNumber() {
+		AlertDialog.Builder abuilder = new Builder(this);
+		abuilder.setMessage("Must choose valid time greater than 1 minute");
+		abuilder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
+		
+		AlertDialog alert = abuilder.create();
+		alert.show();
+		return;
 	}
 
 	private void returnToTimer() {
